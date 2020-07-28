@@ -3,7 +3,7 @@ from pprint import pprint
 from odp.client import ODPClient
 from odp.exceptions import ODPException
 
-client = ODPClient(timeout=None)
+client = ODPClient()
 try:
     result = client.list_metadata_records('saeon')
     pprint(result, indent=4)
