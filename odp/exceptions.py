@@ -1,6 +1,6 @@
 class ODPException(Exception):
     def __init__(self, *args, **kwargs):
-        self.status_code = kwargs.pop('status_code', None)
+        self.status_code = kwargs.pop('status_code')
         self.error_detail = kwargs.pop('error_detail', str(args))
 
 

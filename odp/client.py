@@ -50,7 +50,7 @@ class ODPClient:
                     timeout=self.timeout,
                 )
             except OAuthError as e:
-                raise ODPAuthError(*e.args) from e
+                raise ODPAuthError(*e.args, status_code=403) from e
             except requests.RequestException as e:
                 raise ODPServerError(*e.args, status_code=503) from e
 
