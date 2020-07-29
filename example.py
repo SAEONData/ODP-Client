@@ -8,4 +8,4 @@ try:
     result = client.list_metadata_records('saeon')
     pprint(result, indent=4)
 except ODPException as e:
-    pprint(e)
+    print(f"{e}: {e.error_detail}")
