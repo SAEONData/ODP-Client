@@ -104,6 +104,7 @@ class ODPClient:
     def list_metadata_records(
             self,
             institution_key: str,
+            *,
             offset: int = 0,
             limit: int = 100,
     ) -> List[Dict[str, Any]]:
@@ -130,10 +131,11 @@ class ODPClient:
             collection_key: str,
             schema_key: str,
             metadata: Dict[str, Any],
-            terms_conditions_accepted: bool,
-            data_agreement_accepted: bool,
-            data_agreement_url: str,
+            *,
             capture_method: str,
+            data_agreement_url: str,
+            data_agreement_accepted: bool = True,
+            terms_conditions_accepted: bool = True,
             doi: str = '',
             auto_assign_doi: bool = False,
     ) -> Dict[str, Any]:
@@ -145,10 +147,10 @@ class ODPClient:
                 'collection_key': collection_key,
                 'schema_key': schema_key,
                 'metadata': metadata,
-                'terms_conditions_accepted': terms_conditions_accepted,
-                'data_agreement_accepted': data_agreement_accepted,
-                'data_agreement_url': data_agreement_url,
                 'capture_method': capture_method,
+                'data_agreement_url': data_agreement_url,
+                'data_agreement_accepted': data_agreement_accepted,
+                'terms_conditions_accepted': terms_conditions_accepted,
                 'doi': doi,
                 'auto_assign_doi': auto_assign_doi,
             }
