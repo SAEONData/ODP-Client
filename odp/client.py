@@ -25,13 +25,22 @@ class ODPClient:
         OAUTH2_SCOPE - whitespace-delimited list of scopes
     """
 
-    def __init__(self, timeout: Optional[float] = 5.0):
+    def __init__(
+            self,
+            *,
+            verify: bool = True,
+            timeout: Optional[float] = 5.0,
+    ):
+        """ Constructor. The optional parameters should typically only be used
+        when connecting to local dev instances of the API and auth servers.
+        """
         self.public_url = Config.ODP_PUBLIC_API
         self.admin_url = Config.ODP_ADMIN_API
         self.auth_url = Config.OAUTH2_SERVER
         self.client_id = Config.OAUTH2_CLIENT_ID
         self.client_secret = Config.OAUTH2_CLIENT_SECRET
         self.scope = Config.OAUTH2_SCOPE
+        self.verify = verify
         self.timeout = timeout
         self.client_session = OAuth2Session(
             self.client_id,
@@ -47,6 +56,7 @@ class ODPClient:
                 self._token = self.client_session.fetch_token(
                     self.auth_url + '/oauth2/token',
                     grant_type='client_credentials',
+                    verify=self.verify,
                     timeout=self.timeout,
                 )
             except OAuthError as e:
@@ -69,6 +79,7 @@ class ODPClient:
                 method, url + endpoint,
                 json=json,
                 headers=headers,
+                verify=self.verify,
                 timeout=self.timeout,
             )
             r.raise_for_status()
