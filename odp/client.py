@@ -49,61 +49,7 @@ class ODPClient:
         )
         self._token = None
 
-    @property
-    def token(self):
-        if self._token is None:
-            try:
-                self._token = self.client_session.fetch_token(
-                    self.auth_url + '/oauth2/token',
-                    grant_type='client_credentials',
-                    verify=self.verify,
-                    timeout=self.timeout,
-                )
-            except OAuthError as e:
-                raise ODPAuthError(*e.args, status_code=403) from e
-            except requests.RequestException as e:
-                raise ODPServerError(*e.args, status_code=503) from e
-
-        return self._token
-
-    def _request(self, url, method, endpoint, json=None):
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + self.token['access_token'],
-        }
-        if method in ('POST', 'PUT'):
-            headers['Content-Type'] = 'application/json'
-
-        try:
-            r = requests.request(
-                method, url + endpoint,
-                json=json,
-                headers=headers,
-                verify=self.verify,
-                timeout=self.timeout,
-            )
-            r.raise_for_status()
-            return r.json()
-
-        except requests.HTTPError as e:
-            if (status_code := e.response.status_code) == 403:
-                exc = ODPAuthError
-            elif 400 <= status_code < 500:
-                exc = ODPClientError
-            elif 500 <= status_code < 600:
-                exc = ODPServerError
-            else:
-                exc = ODPException
-
-            try:
-                error_detail = e.response.json()
-            except ValueError:
-                error_detail = e.response.text
-
-            raise exc(*e.args, status_code=status_code, error_detail=error_detail) from e
-
-        except requests.RequestException as e:
-            raise ODPServerError(*e.args, status_code=503) from e
+    # region Institution API
 
     def list_institutions(self) -> List[Dict[str, Any]]:
         return self._request(
@@ -111,6 +57,27 @@ class ODPClient:
             method='GET',
             endpoint='/institution/',
         )
+
+    def create_institution(
+            self,
+            institution_key: str,
+            institution_name: str,
+            parent_key: Optional[str],
+    ) -> Dict[str, Any]:
+        return self._request(
+            url=self.admin_url,
+            method='POST',
+            endpoint='/institution/',
+            json={
+                'key': institution_key,
+                'name': institution_name,
+                'parent_key': parent_key,
+            }
+        )
+
+    # endregion
+
+    # region Metadata API
 
     def list_metadata_records(
             self,
@@ -166,3 +133,61 @@ class ODPClient:
                 'auto_assign_doi': auto_assign_doi,
             }
         )
+
+    # endregion
+
+    def _request(self, url, method, endpoint, json=None):
+        headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + self.token['access_token'],
+        }
+        if method in ('POST', 'PUT'):
+            headers['Content-Type'] = 'application/json'
+
+        try:
+            r = requests.request(
+                method, url + endpoint,
+                json=json,
+                headers=headers,
+                verify=self.verify,
+                timeout=self.timeout,
+            )
+            r.raise_for_status()
+            return r.json()
+
+        except requests.HTTPError as e:
+            if (status_code := e.response.status_code) == 403:
+                exc = ODPAuthError
+            elif 400 <= status_code < 500:
+                exc = ODPClientError
+            elif 500 <= status_code < 600:
+                exc = ODPServerError
+            else:
+                exc = ODPException
+
+            try:
+                error_detail = e.response.json()
+            except ValueError:
+                error_detail = e.response.text
+
+            raise exc(*e.args, status_code=status_code, error_detail=error_detail) from e
+
+        except requests.RequestException as e:
+            raise ODPServerError(*e.args, status_code=503) from e
+
+    @property
+    def token(self):
+        if self._token is None:
+            try:
+                self._token = self.client_session.fetch_token(
+                    self.auth_url + '/oauth2/token',
+                    grant_type='client_credentials',
+                    verify=self.verify,
+                    timeout=self.timeout,
+                )
+            except OAuthError as e:
+                raise ODPAuthError(*e.args, status_code=403) from e
+            except requests.RequestException as e:
+                raise ODPServerError(*e.args, status_code=503) from e
+
+        return self._token
