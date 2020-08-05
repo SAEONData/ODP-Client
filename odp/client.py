@@ -60,8 +60,8 @@ class ODPClient:
 
     def create_institution(
             self,
-            institution_key: str,
-            institution_name: str,
+            key: str,
+            name: str,
             parent_key: Optional[str],
     ) -> Dict[str, Any]:
         return self._request(
@@ -69,8 +69,8 @@ class ODPClient:
             method='POST',
             endpoint='/institution/',
             json={
-                'key': institution_key,
-                'name': institution_name,
+                'key': key,
+                'name': name,
                 'parent_key': parent_key,
             }
         )
@@ -136,6 +136,34 @@ class ODPClient:
 
     # endregion
 
+    # region Project API
+
+    def list_projects(self) -> List[Dict[str, Any]]:
+        return self._request(
+            url=self.public_url,
+            method='GET',
+            endpoint='/project/',
+        )
+
+    def create_project(
+            self,
+            key: str,
+            name: str,
+            description: str = None,
+    ) -> Dict[str, Any]:
+        return self._request(
+            url=self.public_url,
+            method='POST',
+            endpoint='/project/',
+            json={
+                'key': key,
+                'name': name,
+                'description': description,
+            }
+        )
+
+    # endregion
+
     def _request(self, url, method, endpoint, json=None):
         headers = {
             'Accept': 'application/json',
@@ -191,14 +219,3 @@ class ODPClient:
                 raise ODPServerError(*e.args, status_code=503) from e
 
         return self._token
-
-    # region Project API
-
-    def list_projects(self) -> List[Dict[str, Any]]:
-        return self._request(
-            url=self.public_url,
-            method='GET',
-            endpoint='/project/',
-        )
-
-    # endregion
