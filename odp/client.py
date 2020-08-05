@@ -191,3 +191,14 @@ class ODPClient:
                 raise ODPServerError(*e.args, status_code=503) from e
 
         return self._token
+
+    # region Project API
+
+    def list_projects(self) -> List[Dict[str, Any]]:
+        return self._request(
+            url=self.public_url,
+            method='GET',
+            endpoint='/project/',
+        )
+
+    # endregion
