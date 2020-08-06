@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Iterable
 
 import requests
 from authlib.integrations.base_client.errors import OAuthError
@@ -72,6 +72,43 @@ class ODPClient:
                 'key': key,
                 'name': name,
                 'parent_key': parent_key,
+            }
+        )
+
+    # endregion
+
+    # region Collection API
+
+    def list_metadata_collections(
+            self,
+            institution_key: str,
+    ) -> List[Dict[str, Any]]:
+        return self._request(
+            url=self.public_url,
+            method='GET',
+            endpoint=f'/{institution_key}/collection/',
+        )
+
+    def create_metadata_collection(
+            self,
+            institution_key: str,
+            key: str,
+            name: str,
+            description: str = None,
+            *,
+            doi_scope: str = '',
+            project_keys: Iterable[str] = (),
+    ) -> Dict[str, Any]:
+        return self._request(
+            url=self.public_url,
+            method='POST',
+            endpoint=f'/{institution_key}/collection/',
+            json={
+                'key': key,
+                'name': name,
+                'description': description,
+                'doi_scope': doi_scope,
+                'project_keys': project_keys,
             }
         )
 
