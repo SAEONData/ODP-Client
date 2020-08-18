@@ -182,10 +182,11 @@ class ODPClient:
             endpoint='/project/',
         )
 
-    def create_project(
+    def create_or_update_project(
             self,
             key: str,
             name: str,
+            *,
             description: str = None,
     ) -> Dict[str, Any]:
         return self._request(
