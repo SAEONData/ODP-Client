@@ -14,9 +14,7 @@ See `example.py` for example usage.
 
 ### Environment variables
 
-The library reads the following environment variables. These may be configured in
-a `.env` file located in your application run directory. See `.env.example` for an
-example configuration.
+The library reads the following environment variables.
 
 - `ODP_PUBLIC_API`: URL of the ODP Public API
 - `ODP_ADMIN_API`: URL of the ODP Admin API (optional; requires internal network access)
@@ -25,8 +23,8 @@ example configuration.
 - `OAUTH2_CLIENT_SECRET`: registered client secret for your application
 - `OAUTH2_SCOPE`: whitespace-delimited list of scopes required by your application
 
-_N.B. DO NOT commit secrets to source control. Be sure to add a `.gitignore` rule for
-`.env` files to your project._
+_N.B. DO NOT commit secrets to source control. If you load environment variables from
+a `.env` file, be sure to add a `.gitignore` rule for `.env` to your project._
 
 ### ODP server certificate verification
 

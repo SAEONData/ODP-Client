@@ -15,6 +15,5 @@ setup(
     install_requires=[
         'authlib',
         'requests',
-        'python-dotenv',
     ],
 )

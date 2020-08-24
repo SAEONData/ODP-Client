@@ -1,7 +1,11 @@
 from pprint import pprint
 
+from dotenv import load_dotenv
+
 from odp.client import ODPClient
 from odp.exceptions import ODPException
+
+load_dotenv()
 
 client = ODPClient()
 try:
