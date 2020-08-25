@@ -1,10 +1,10 @@
+import os
 from typing import List, Dict, Any, Optional, Iterable
 
 import requests
 from authlib.integrations.base_client.errors import OAuthError
 from authlib.integrations.requests_client import OAuth2Session
 
-from .config import Config
 from .exceptions import ODPException, ODPAuthError, ODPServerError, ODPClientError
 
 __all__ = ['ODPClient']
@@ -34,12 +34,12 @@ class ODPClient:
         """ Constructor. The optional parameters should typically only be used
         when connecting to local dev instances of the API and auth servers.
         """
-        self.public_url = Config.ODP_PUBLIC_API
-        self.admin_url = Config.ODP_ADMIN_API
-        self.auth_url = Config.OAUTH2_SERVER
-        self.client_id = Config.OAUTH2_CLIENT_ID
-        self.client_secret = Config.OAUTH2_CLIENT_SECRET
-        self.scope = Config.OAUTH2_SCOPE
+        self.public_url = os.environ['ODP_PUBLIC_API']
+        self.admin_url = os.getenv('ODP_ADMIN_API')
+        self.auth_url = os.environ['OAUTH2_SERVER']
+        self.client_id = os.environ['OAUTH2_CLIENT_ID']
+        self.client_secret = os.environ['OAUTH2_CLIENT_SECRET']
+        self.scope = os.environ['OAUTH2_SCOPE']
         self.verify = verify
         self.timeout = timeout
         self.client_session = OAuth2Session(
