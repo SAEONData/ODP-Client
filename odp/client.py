@@ -58,7 +58,7 @@ class ODPClient:
             endpoint='/institution/',
         )
 
-    def create_institution(
+    def create_or_update_institution(
             self,
             key: str,
             name: str,
@@ -89,13 +89,13 @@ class ODPClient:
             endpoint=f'/{institution_key}/collection/',
         )
 
-    def create_metadata_collection(
+    def create_or_update_metadata_collection(
             self,
             institution_key: str,
             key: str,
             name: str,
-            description: str = None,
             *,
+            description: str = None,
             doi_scope: str = '',
             project_keys: Iterable[str] = (),
     ) -> Dict[str, Any]:
