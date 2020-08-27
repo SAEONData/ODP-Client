@@ -96,7 +96,7 @@ class ODPClient:
             name: str,
             *,
             description: str = None,
-            doi_scope: str = '',
+            doi_scope: str = None,
             project_keys: Iterable[str] = (),
     ) -> Dict[str, Any]:
         return self._request(
