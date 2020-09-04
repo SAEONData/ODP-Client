@@ -171,6 +171,22 @@ class ODPClient:
             }
         )
 
+    def change_state_of_metadata_record(
+            self,
+            institution_key: str,
+            record_id: str,
+            state: str,
+    ) -> Dict[str, Any]:
+        """ Set the workflow state of a metadata record.
+        :return: {"success": bool, "errors": dict}
+        """
+        return self._request(
+            url=self.public_url,
+            method='POST',
+            endpoint=f'/{institution_key}/metadata/workflow/{record_id}',
+            params={'state': state},
+        )
+
     # endregion
 
     # region Project API
@@ -202,7 +218,7 @@ class ODPClient:
 
     # endregion
 
-    def _request(self, url, method, endpoint, json=None):
+    def _request(self, url, method, endpoint, *, params=None, json=None):
         headers = {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + self.token['access_token'],
@@ -213,6 +229,7 @@ class ODPClient:
         try:
             r = requests.request(
                 method, url + endpoint,
+                params=params,
                 json=json,
                 headers=headers,
                 verify=self.verify,
