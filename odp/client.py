@@ -151,7 +151,7 @@ class ODPClient:
             data_agreement_url: str,
             data_agreement_accepted: bool = True,
             terms_conditions_accepted: bool = True,
-            doi: str = '',
+            doi: str = None,
             auto_assign_doi: bool = False,
     ) -> Dict[str, Any]:
         return self._request(
