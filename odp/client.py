@@ -53,7 +53,7 @@ class ODPClient:
 
     def list_institutions(self) -> List[Dict[str, Any]]:
         return self._request(
-            url=self.admin_url,
+            admin_api=True,
             method='GET',
             endpoint='/institution/',
         )
@@ -65,7 +65,7 @@ class ODPClient:
             parent_key: Optional[str],
     ) -> Dict[str, Any]:
         return self._request(
-            url=self.admin_url,
+            admin_api=True,
             method='POST',
             endpoint='/institution/',
             json={
@@ -84,7 +84,6 @@ class ODPClient:
             institution_key: str,
     ) -> List[Dict[str, Any]]:
         return self._request(
-            url=self.public_url,
             method='GET',
             endpoint=f'/{institution_key}/collection/',
         )
@@ -100,7 +99,6 @@ class ODPClient:
             project_keys: Iterable[str] = (),
     ) -> Dict[str, Any]:
         return self._request(
-            url=self.public_url,
             method='POST',
             endpoint=f'/{institution_key}/collection/',
             json={
@@ -124,7 +122,6 @@ class ODPClient:
             limit: int = 100,
     ) -> List[Dict[str, Any]]:
         return self._request(
-            url=self.public_url,
             method='GET',
             endpoint=f'/{institution_key}/metadata/?offset={offset}&limit={limit}',
         )
@@ -135,7 +132,6 @@ class ODPClient:
             record_id: str,
     ) -> Dict[str, Any]:
         return self._request(
-            url=self.public_url,
             method='GET',
             endpoint=f'/{institution_key}/metadata/{record_id}',
         )
@@ -155,7 +151,6 @@ class ODPClient:
             auto_assign_doi: bool = False,
     ) -> Dict[str, Any]:
         return self._request(
-            url=self.public_url,
             method='POST',
             endpoint=f'/{institution_key}/metadata/',
             json={
@@ -181,7 +176,6 @@ class ODPClient:
         :return: {"success": bool, "errors": dict}
         """
         return self._request(
-            url=self.public_url,
             method='POST',
             endpoint=f'/{institution_key}/metadata/workflow/{record_id}',
             params={'state': state},
@@ -193,7 +187,7 @@ class ODPClient:
 
     def list_projects(self) -> List[Dict[str, Any]]:
         return self._request(
-            url=self.public_url,
+            admin_api=True,
             method='GET',
             endpoint='/project/',
         )
@@ -206,7 +200,7 @@ class ODPClient:
             description: str = None,
     ) -> Dict[str, Any]:
         return self._request(
-            url=self.public_url,
+            admin_api=True,
             method='POST',
             endpoint='/project/',
             json={
@@ -218,7 +212,13 @@ class ODPClient:
 
     # endregion
 
-    def _request(self, url, method, endpoint, *, params=None, json=None):
+    def _request(self, method, endpoint, *, admin_api=False, params=None, json=None):
+        if admin_api:
+            if not (server_url := self.admin_url):
+                raise ODPException("ODP Admin API URL is required")
+        else:
+            server_url = self.public_url
+
         headers = {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + self.token['access_token'],
@@ -228,7 +228,7 @@ class ODPClient:
 
         try:
             r = requests.request(
-                method, url + endpoint,
+                method, server_url + endpoint,
                 params=params,
                 json=json,
                 headers=headers,
