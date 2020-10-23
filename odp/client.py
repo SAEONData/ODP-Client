@@ -123,7 +123,11 @@ class ODPClient:
     ) -> List[Dict[str, Any]]:
         return self._request(
             method='GET',
-            endpoint=f'/{institution_key}/metadata/?offset={offset}&limit={limit}',
+            endpoint=f'/{institution_key}/metadata/',
+            params={
+                'offset': offset,
+                'limit': limit,
+            }
         )
 
     def get_metadata_record(
@@ -208,6 +212,36 @@ class ODPClient:
                 'name': name,
                 'description': description,
             }
+        )
+
+    # endregion
+
+    # region DataCite API
+
+    def list_datacite_dois(
+            self,
+            *,
+            page_size: int = 100,
+            page_num: int = 1,
+    ) -> Dict[str, Any]:
+        return self._request(
+            admin_api=True,
+            method='GET',
+            endpoint='/datacite/',
+            params={
+                'page_size': page_size,
+                'page_num': page_num,
+            }
+        )
+
+    def get_datacite_doi(
+            self,
+            doi: str,
+    ) -> Dict[str, Any]:
+        return self._request(
+            admin_api=True,
+            method='GET',
+            endpoint=f'/datacite/{doi}',
         )
 
     # endregion
