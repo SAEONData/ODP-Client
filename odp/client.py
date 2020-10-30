@@ -1,4 +1,5 @@
 import os
+from dataclasses import dataclass, asdict
 from typing import List, Dict, Any, Optional, Iterable
 
 import requests
@@ -49,7 +50,7 @@ class ODPClient:
         )
         self._token = None
 
-    # region Institution API
+    # region Institution API (admin)
 
     def list_institutions(self) -> List[Dict[str, Any]]:
         return self._request(
@@ -187,7 +188,7 @@ class ODPClient:
 
     # endregion
 
-    # region Project API
+    # region Project API (admin)
 
     def list_projects(self) -> List[Dict[str, Any]]:
         return self._request(
@@ -216,7 +217,46 @@ class ODPClient:
 
     # endregion
 
-    # region DataCite API
+    # region Schema API (admin)
+
+    def list_schemas(self) -> List[Dict[str, Any]]:
+        return self._request(
+            admin_api=True,
+            method='GET',
+            endpoint='/schema/',
+        )
+
+    @dataclass
+    class SchemaAttrMapping:
+        record_attr: str
+        json_path: str
+        is_key: bool
+
+    def create_or_update_schema(
+            self,
+            key: str,
+            name: str,
+            schema: Dict[str, Any],
+            *,
+            template: Dict[str, Any] = None,
+            attr_mappings: List[SchemaAttrMapping] = None
+    ) -> Dict[str, Any]:
+        return self._request(
+            admin_api=True,
+            method='POST',
+            endpoint='/schema/',
+            json={
+                'key': key,
+                'name': name,
+                'schema': schema,
+                'template': template or {},
+                'attr_mappings': [asdict(attr_map) for attr_map in attr_mappings or []],
+            }
+        )
+
+    # endregion
+
+    # region DataCite API (admin)
 
     def list_datacite_dois(
             self,
