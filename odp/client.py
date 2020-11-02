@@ -256,6 +256,82 @@ class ODPClient:
 
     # endregion
 
+    # region Workflow API (admin)
+    
+    def list_workflow_states(self) -> List[Dict[str, Any]]:
+        return self._request(
+            admin_api=True,
+            method='GET',
+            endpoint='/workflow/state/',
+        )
+
+    def create_or_update_workflow_state(
+            self,
+            key: str,
+            name: str,
+            rules: Dict[str, Any],
+            revert_key: Optional[str],
+            publish: bool,
+    ) -> Dict[str, Any]:
+        return self._request(
+            admin_api=True,
+            method='POST',
+            endpoint='/workflow/state/',
+            json={
+                'key': key,
+                'name': name,
+                'rules': rules,
+                'revert_key': revert_key,
+                'publish': publish,
+            }
+        )
+
+    def list_workflow_transitions(self) -> List[Dict[str, Any]]:
+        return self._request(
+            admin_api=True,
+            method='GET',
+            endpoint='/workflow/transition/',
+        )
+
+    def create_or_update_workflow_transition(
+            self,
+            from_key: Optional[str],
+            to_key: str,
+    ) -> Dict[str, Any]:
+        return self._request(
+            admin_api=True,
+            method='POST',
+            endpoint='/workflow/transition/',
+            json={
+                'from_key': from_key,
+                'to_key': to_key,
+            }
+        )
+
+    def list_workflow_annotations(self) -> List[Dict[str, Any]]:
+        return self._request(
+            admin_api=True,
+            method='GET',
+            endpoint='/workflow/annotation/',
+        )
+
+    def create_or_update_workflow_annotation(
+            self,
+            key: str,
+            attributes: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        return self._request(
+            admin_api=True,
+            method='POST',
+            endpoint='/workflow/annotation/',
+            json={
+                'key': key,
+                'attributes': attributes,
+            }
+        )
+
+    # endregion
+
     # region DataCite API (admin)
 
     def list_datacite_dois(
