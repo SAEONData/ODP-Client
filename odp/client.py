@@ -1,5 +1,4 @@
 import os
-from dataclasses import dataclass, asdict
 from typing import List, Dict, Any, Optional, Iterable
 
 import requests
@@ -226,12 +225,6 @@ class ODPClient:
             endpoint='/schema/',
         )
 
-    @dataclass
-    class SchemaAttrMapping:
-        record_attr: str
-        json_path: str
-        is_key: bool
-
     def create_or_update_schema(
             self,
             key: str,
@@ -239,7 +232,7 @@ class ODPClient:
             schema: Dict[str, Any],
             *,
             template: Dict[str, Any] = None,
-            attr_mappings: List[SchemaAttrMapping] = None
+            attr_mappings: Dict[str, str] = None
     ) -> Dict[str, Any]:
         return self._request(
             admin_api=True,
@@ -250,7 +243,7 @@ class ODPClient:
                 'name': name,
                 'schema': schema,
                 'template': template or {},
-                'attr_mappings': [asdict(attr_map) for attr_map in attr_mappings or []],
+                'attr_mappings': attr_mappings or {},
             }
         )
 
