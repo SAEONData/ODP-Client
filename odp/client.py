@@ -147,12 +147,8 @@ class ODPClient:
             schema_key: str,
             metadata: Dict[str, Any],
             *,
-            capture_method: str,
-            data_agreement_url: str,
-            data_agreement_accepted: bool = True,
-            terms_conditions_accepted: bool = True,
             doi: str = None,
-            auto_assign_doi: bool = False,
+            sid: str = None,
     ) -> Dict[str, Any]:
         return self._request(
             method='POST',
@@ -161,12 +157,8 @@ class ODPClient:
                 'collection_key': collection_key,
                 'schema_key': schema_key,
                 'metadata': metadata,
-                'capture_method': capture_method,
-                'data_agreement_url': data_agreement_url,
-                'data_agreement_accepted': data_agreement_accepted,
-                'terms_conditions_accepted': terms_conditions_accepted,
                 'doi': doi,
-                'auto_assign_doi': auto_assign_doi,
+                'sid': sid,
             }
         )
 
