@@ -317,6 +317,34 @@ class ODPClient:
 
     # endregion
 
+    # region Catalogue API
+
+    def list_catalogue_records(
+            self,
+            *,
+            offset: int = 0,
+            limit: int = 100,
+    ) -> List[Dict[str, Any]]:
+        return self._request(
+            method='GET',
+            endpoint=f'/catalogue/',
+            params={
+                'offset': offset,
+                'limit': limit,
+            }
+        )
+
+    def get_catalogue_record(
+            self,
+            record_id: str,
+    ) -> Dict[str, Any]:
+        return self._request(
+            method='GET',
+            endpoint=f'/catalogue/{record_id}',
+        )
+
+    # endregion
+
     # region DataCite API (admin)
 
     def list_datacite_dois(
