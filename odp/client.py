@@ -133,12 +133,26 @@ class ODPClient:
     def get_metadata_record(
             self,
             institution_key: str,
-            record_id: str,
+            *,
+            record_id: str = None,
+            doi: str = None,
+            sid: str = None,
     ) -> Dict[str, Any]:
-        return self._request(
-            method='GET',
-            endpoint=f'/{institution_key}/metadata/{record_id}',
-        )
+        if record_id:
+            return self._request(
+                method='GET',
+                endpoint=f'/{institution_key}/metadata/{record_id}',
+            )
+        elif doi:
+            return self._request(
+                method='GET',
+                endpoint=f'/{institution_key}/metadata/doi/{doi}',
+            )
+        elif sid:
+            return self._request(
+                method='GET',
+                endpoint=f'/{institution_key}/metadata/sid/{sid}',
+            )
 
     def create_or_update_metadata_record(
             self,
