@@ -357,6 +357,22 @@ class ODPClient:
             endpoint=f'/catalogue/{record_id}',
         )
 
+    def select_catalogue_records(
+            self,
+            *record_ids: str,
+            offset: int = 0,
+            limit: int = 100,
+    ) -> List[Dict[str, Any]]:
+        return self._request(
+            method='POST',
+            endpoint=f'/catalogue/',
+            json=list(record_ids),
+            params={
+                'offset': offset,
+                'limit': limit,
+            }
+        )
+
     # endregion
 
     # region DataCite API (admin)
