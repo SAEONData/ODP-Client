@@ -186,6 +186,19 @@ class ODPClient:
             }
         )
 
+    def validate_metadata_record(
+            self,
+            institution_key: str,
+            record_id: str,
+    ) -> Dict[str, Any]:
+        """ Validate a metadata record.
+        :return: {"success": bool, "errors": dict}
+        """
+        return self._request(
+            method='POST',
+            endpoint=f'/{institution_key}/metadata/validate/{record_id}',
+        )
+
     def change_state_of_metadata_record(
             self,
             institution_key: str,
