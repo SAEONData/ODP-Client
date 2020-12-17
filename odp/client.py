@@ -58,6 +58,16 @@ class ODPClient:
             endpoint='/institution/',
         )
 
+    def get_institution(
+            self,
+            key: str,
+    ) -> Dict[str, Any]:
+        return self._request(
+            admin_api=True,
+            method='GET',
+            endpoint=f'/institution/{key}',
+        )
+
     def create_or_update_institution(
             self,
             key: str,
