@@ -73,6 +73,7 @@ class ODPClient:
             key: str,
             name: str,
             parent_key: Optional[str],
+            domain_names: Iterable[str],
     ) -> Dict[str, Any]:
         return self._request(
             admin_api=True,
@@ -82,6 +83,7 @@ class ODPClient:
                 'key': key,
                 'name': name,
                 'parent_key': parent_key,
+                'domain_names': domain_names,
             }
         )
 
