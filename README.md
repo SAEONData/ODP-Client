@@ -23,12 +23,26 @@ The library reads the following environment variables.
 - `OAUTH2_CLIENT_SECRET`: registered client secret for your application
 - `OAUTH2_SCOPE`: whitespace-delimited list of scopes required by your application
 
-_N.B. DO NOT commit secrets to source control. If you load environment variables from
+_N.B. Don't commit secrets to source control. If you load environment variables from
 a `.env` file, be sure to add a `.gitignore` rule for `.env` to your project._
 
 ### ODP server certificate verification
 
-If using this library in a non-production environment, you will need to install the
-SAEON CA certificate on your system, and tell the Python `requests` module to use the
-system certificates, by setting the `REQUESTS_CA_BUNDLE` environment variable.
-For Debian/Ubuntu, the value should typically be `/etc/ssl/certs/ca-certificates.crt`.
+For admin API usage, or if using this client in a non-production environment,
+you will need to install the applicable SAEON CA certificate to your system,
+and tell the `requests` module to use your system certificates.
+
+The CA certificate may be downloaded from `https://odp-admin.saeon.xyz/ca.crt`
+(replace `.xyz` with the applicable domain suffix).
+
+Debian/Ubuntu:
+
+    sudo cp ca.crt /usr/local/share/ca-certificates/
+    sudo update-ca-certificates
+    export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
+CentOS/Fedora:
+
+    sudo cp saeon-ca.crt /etc/pki/ca-trust/source/anchors/
+    sudo update-ca-trust
+    export REQUESTS_CA_BUNDLE=/etc/pki/tls/cert.pem
