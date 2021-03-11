@@ -43,6 +43,6 @@ Debian/Ubuntu:
 
 CentOS/Fedora:
 
-    sudo cp saeon-ca.crt /etc/pki/ca-trust/source/anchors/
+    sudo cp ca.crt /etc/pki/ca-trust/source/anchors/
     sudo update-ca-trust
     export REQUESTS_CA_BUNDLE=/etc/pki/tls/cert.pem
