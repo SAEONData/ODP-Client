@@ -230,9 +230,8 @@ class ODPClient:
     def create_or_update_project(
             self,
             key: str,
+            abbr: str,
             name: str,
-            *,
-            description: str = None,
     ) -> Dict[str, Any]:
         return self._request(
             admin_api=True,
@@ -240,8 +239,8 @@ class ODPClient:
             endpoint='/project/',
             json={
                 'key': key,
+                'abbr': abbr,
                 'name': name,
-                'description': description,
             }
         )
 
