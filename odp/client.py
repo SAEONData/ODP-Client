@@ -376,6 +376,21 @@ class ODPClient:
             }
         )
 
+    def count_catalogue_records(
+            self,
+            *,
+            institution_key: str = None,
+            include_unpublished: bool = False,
+    ) -> int:
+        return self._request(
+            method='GET',
+            endpoint=f'/catalogue/count',
+            params={
+                'institution_key': institution_key,
+                'include_unpublished': include_unpublished,
+            }
+        )
+
     def get_catalogue_record(
             self,
             record_id: str,
