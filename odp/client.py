@@ -360,6 +360,8 @@ class ODPClient:
     def list_catalogue_records(
             self,
             *,
+            institution_key: str = None,
+            include_unpublished: bool = False,
             offset: int = 0,
             limit: int = 100,
     ) -> List[Dict[str, Any]]:
@@ -367,6 +369,8 @@ class ODPClient:
             method='GET',
             endpoint=f'/catalogue/',
             params={
+                'institution_key': institution_key,
+                'include_unpublished': include_unpublished,
                 'offset': offset,
                 'limit': limit,
             }
