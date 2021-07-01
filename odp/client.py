@@ -393,12 +393,26 @@ class ODPClient:
 
     def get_catalogue_record(
             self,
-            record_id: str,
+            *,
+            record_id: str = None,
+            doi: str = None,
+            sid: str = None,
     ) -> Dict[str, Any]:
-        return self._request(
-            method='GET',
-            endpoint=f'/catalogue/{record_id}',
-        )
+        if record_id:
+            return self._request(
+                method='GET',
+                endpoint=f'/catalogue/{record_id}',
+            )
+        elif doi:
+            return self._request(
+                method='GET',
+                endpoint=f'/catalogue/doi/{doi}',
+            )
+        elif sid:
+            return self._request(
+                method='GET',
+                endpoint=f'/catalogue/sid/{sid}',
+            )
 
     def select_catalogue_records(
             self,
